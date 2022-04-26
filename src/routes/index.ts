@@ -1,8 +1,9 @@
-import {Router} from "express";
+import * as express from "express";
 
-const router = Router()
-router.get("/", (req, res) => {
-    res.render("index")
-});
+import mainRoutes from "./main";
+
+const router = express.Router();
+
+router.use('/', mainRoutes);
 
 export default router;
