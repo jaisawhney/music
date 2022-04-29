@@ -1,2 +1,21 @@
-<h1>Music Player</h1>
-<p>Hello World!</p>
+<div class="mt-4 p-2">
+    <h1>Music Player</h1>
+    <form action="/tracks/refresh" method="post">
+        <button type="submit" class="btn btn-dark">Refresh Library</button>
+    </form>
+
+    {{#each songs }}
+        <div class="card my-2 song" data-id="{{id}}" data-title="{{title}}"
+             data-artist="{{artist}}" style="cursor: pointer;">
+
+            <div class="d-flex">
+                <img src="{{albumArt}}" class="rounded-start" alt="Album Art"
+                     style="width: auto; max-height: 10vh;">
+                <div class="card-body">
+                    <p class="card-title m-0">{{title}}</p>
+                    <p class="card-text m-0 text-muted">{{artist}}</p>
+                </div>
+            </div>
+        </div>
+    {{/each}}
+</div>

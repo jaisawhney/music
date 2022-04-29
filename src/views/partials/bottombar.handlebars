@@ -1,0 +1,24 @@
+<div class="fixed-bottom bg-dark p-2">
+    <div class="audio-player" id="audio-player" style="user-select: none">
+        <audio>
+            <source type="audio/mpeg">
+        </audio>
+        <div class="container text-light">
+            <div class="row align-items-center">
+                <div class="col-md-2 col-12 text-center order-md-first order-last">
+                    <i class="bi bi-skip-backward-fill align-middle" id="prevSongBtn"></i>
+                    <i class="bi bi-play-fill align-middle" id="playBtn" style="font-size: 2em"></i>
+                    <i class="bi bi-skip-forward-fill align-middle" id="nextSongBtn"></i>
+                </div>
+                <div class="col-md-8 col-12">
+                    <p class="text-center text-muted mb-1" style="font-size: 0.9em" id="songName">...</p>
+                    <input type="range" value="0" class="w-100 d-block mb-2" id="seekSlider">
+                </div>
+                <div class="col-2 text-center d-none d-md-block">
+                    <i class="bi bi-volume-up-fill align-middle"></i>
+                    <input type="range" value="50" max="100" step="1" class="align-middle w-75" id="volumeSlider">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

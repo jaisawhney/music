@@ -42,7 +42,7 @@ router.post('/refresh/', async (req, res) => {
         let albumArtPath: string | null = null;
         if (albumArt) {
             albumArtPath = path.join('music', path.parse(song).name + '.jpg');
-            fs.writeFileSync(path.join(__dirname, '..', albumArtPath), albumArt.data, "binary");
+            fs.writeFileSync(path.join(__dirname, '..', albumArtPath), albumArt.data, 'binary');
         }
         await models.AudioTrack.create({
             title: metadata.common?.title || path.parse(song).name,
