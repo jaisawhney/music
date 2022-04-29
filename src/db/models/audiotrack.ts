@@ -4,8 +4,8 @@ export default (sequelize: Sequelize) => {
     class AudioTrack extends Model<InferAttributes<AudioTrack>, InferCreationAttributes<AudioTrack>> {
         declare id: CreationOptional<string>;
         declare title: string;
-        declare artist: string;
-        declare album: string;
+        declare artist: string | null;
+        declare album: string | null;
         declare albumArt: string | null;
         declare filePath: string;
     }
