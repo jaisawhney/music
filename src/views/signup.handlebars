@@ -1,0 +1,21 @@
+<div class="row vh-100 d-flex justify-content-center align-items-center">
+    <div class="card p-4 col-4">
+        <h1 class="card-title">Sign Up</h1>
+        <div class="card-body p-0">
+            <form action="/signup" method="POST">
+                <div class="mb-2">
+                    <label class="form-label w-100">Username
+                        <input type="text" class="form-control" name="username">
+                    </label>
+                </div>
+                <div class="mb-2">
+                    <label class="form-label w-100">Password
+                        <input type="password" class="form-control" name="password">
+                    </label>
+                </div>
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </form>
+            <p class="mb-0 mt-2 text-muted">Or <a href="/login">login</a></p>
+        </div>
+    </div>
+</div>
