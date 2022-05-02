@@ -7,6 +7,7 @@ export const checkAuth = (req: Request, res: Response, next: NextFunction) => {
 
     try {
         req.user = jwt.verify(token, process.env.JWT_SECRET as string);
+        res.locals.user = req.user;
         return next();
     } catch {
         return res.redirect('/login');
