@@ -12,8 +12,14 @@
                 <img src="{{albumArt}}" class="rounded-start" alt="Album Art"
                      style="width: auto; max-height: 10vh;">
                 <div class="card-body">
-                    <p class="card-title m-0">{{title}}</p>
-                    <p class="card-text m-0 text-muted">{{artist}}</p>
+                    <div class="d-inline-block p-0">
+                        <p class="card-title m-0">{{title}}</p>
+                        <p class="card-text m-0 text-muted">{{artist}}</p>
+                    </div>
+                    <button class="btn d-inline-block align-top float-end p-0"
+                            style="outline: none;  box-shadow: none;"><i
+                            class="bi bi-heart"
+                            style="color: red"></i></button>
                 </div>
             </div>
         </div>
