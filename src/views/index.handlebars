@@ -17,8 +17,10 @@
                         <p class="card-text m-0 text-muted">{{artist}}</p>
                     </div>
                     <button class="btn d-inline-block align-top float-end p-0"
-                            style="outline: none;  box-shadow: none;"><i
-                            class="bi bi-heart"
+                            style="outline: none; box-shadow: none;"><i
+                            data-favorited="{{#if favoritedBy.id}}1{{else}}0{{/if}}"
+                            class="bi bi-heart-fill favoriteBtn {{#if
+                                    favoritedBy.id}} bi-heart-fill {{else}} bi-heart {{/if}}"
                             style="color: red"></i></button>
                 </div>
             </div>

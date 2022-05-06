@@ -7,7 +7,7 @@ import mm from 'music-metadata';
 const router = Router()
 
 
-router.get('/stream/:song_id/', async (req, res) => {
+router.get('/stream/:song_id', async (req, res) => {
     const songInfo = await models.AudioTrack.findByPk(req.params.song_id);
     if (!songInfo) return res.sendStatus(404);
 
@@ -26,15 +26,47 @@ router.get('/stream/:song_id/', async (req, res) => {
     readStream.pipe(res);
 });
 
+router.put('/:song_id/favorites', async (req, res) => {
+    const songInfo = await models.AudioTrack.findByPk(req.params.song_id);
+    if (!songInfo) return res.sendStatus(404);
 
-router.post('/refresh/', async (req, res) => {
+    models.Favorite.findOrCreate({
+        where: {
+            userId: req.user.id,
+            trackId: req.params.song_id
+        },
+        defaults: {
+            userId: req.user.id,
+            trackId: req.params.song_id
+        }
+    });
+
+    return res.sendStatus(200);
+});
+
+router.delete('/:song_id/favorites', async (req, res) => {
+    const songInfo = await models.AudioTrack.findByPk(req.params.song_id);
+    if (!songInfo) return res.sendStatus(404);
+
+    const result = await models.Favorite.findOne({
+        where: {
+            userId: req.user.id,
+            trackId: req.params.song_id
+        }
+    });
+    if (result) result.destroy();
+
+    return res.sendStatus(200);
+});
+
+router.post('/refresh', async (req, res) => {
     const storedSongs = await models.AudioTrack.findAll({attributes: ['filePath']});
     const library: string[] = fs.readdirSync(path.join(__dirname, '..', 'music'));
     const songs: string[] = library.filter(song => path.extname(song) === '.mp3');
 
     for (const song of songs) {
         const filePath: string = path.join('music', song);
-        if (storedSongs.find(existingSong => existingSong.filePath === filePath))
+        if (storedSongs.find((existingSong: any) => existingSong.filePath === filePath))
             continue;
 
         const metadata = await mm.parseFile(path.join(__dirname, '..', 'music', song));

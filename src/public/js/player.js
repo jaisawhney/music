@@ -12,8 +12,6 @@ let playState = 'pause';
 
 player.addEventListener('click', (e) => {
     const target = e.target;
-    //console.log(target.id);
-
     if (target.id === 'playBtn') {
         if (playState === 'pause' && audio.src) {
             audio.play();
@@ -52,17 +50,41 @@ seekerSlider.addEventListener('change', () => {
 });
 
 volumeSlider.addEventListener('input', () => {
+    localStorage.setItem('playerVolume', (volumeSlider.value / 100).toString());
     audio.volume = volumeSlider.value / 100;
 });
 
-const songs = document.getElementsByClassName('song');
-[...songs].forEach(song => {
-    song.addEventListener('click', playSong);
+const songCards = document.getElementsByClassName('song');
+[...songCards].forEach(song => {
+    return song.addEventListener('click', playSong);
 });
 
 function playSong(e) {
     const songId = e.currentTarget.dataset.id;
-    songName.innerHTML = e.currentTarget.dataset.title
-    audio.src = '/tracks/stream/' + songId;
-    audio.play();
+    if (e.target.classList.contains('favoriteBtn')) {
+        if (e.target.dataset.favorited === '1') {
+            // Unfavorite
+            fetch(`/tracks/${songId}/favorites`, {
+                method: 'DELETE'
+            });
+
+            e.target.classList.add('bi-heart');
+            e.target.classList.remove('bi-heart-fill');
+
+            e.target.dataset.favorited = "0";
+        } else {
+            // Favorite
+            fetch(`/tracks/${songId}/favorites`, {
+                method: 'PUT'
+            });
+            e.target.classList.add('bi-heart-fill');
+            e.target.classList.remove('bi-heart');
+
+            e.target.dataset.favorited = "1";
+        }
+    } else {
+        songName.innerHTML = e.currentTarget.dataset.title
+        audio.src = '/tracks/stream/' + songId;
+        audio.play();
+    }
 }
