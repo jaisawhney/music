@@ -9,6 +9,8 @@ const audio = player.querySelector('audio');
 audio.volume = 0.5;
 
 let playState = 'pause';
+let queue = [];
+let currentPlayingIdx;
 
 player.addEventListener('click', (e) => {
     const target = e.target;
@@ -18,6 +20,10 @@ player.addEventListener('click', (e) => {
         } else if (playState === 'playing') {
             audio.pause();
         }
+    } else if (target.id === 'prevSongBtn') {
+        playSong(Math.max(currentPlayingIdx - 1, 0));
+    } else if (target.id === 'nextSongBtn') {
+        playSong(Math.min(currentPlayingIdx + 1, queue.length - 1));
     }
 });
 
@@ -40,6 +46,10 @@ audio.addEventListener('timeupdate', () => {
     seekerSlider.value = Math.floor(audio.currentTime);
 });
 
+audio.addEventListener('ended', () => {
+    playSong(Math.min(currentPlayingIdx + 1, queue.length - 1));
+});
+
 seekerSlider.addEventListener('input', () => {
     audio.pause();
 });
@@ -56,35 +66,41 @@ volumeSlider.addEventListener('input', () => {
 
 const songCards = document.getElementsByClassName('song');
 [...songCards].forEach(song => {
-    return song.addEventListener('click', playSong);
+    return song.addEventListener('click', e => {
+        const songId = e.currentTarget.dataset.id;
+        if (e.target.classList.contains('favoriteBtn')) {
+            if (e.target.dataset.favorited === '1') {
+                // Unfavorite
+                fetch(`/tracks/${songId}/favorites`, {
+                    method: 'DELETE'
+                });
+
+                e.target.classList.add('bi-heart');
+                e.target.classList.remove('bi-heart-fill');
+
+                e.target.dataset.favorited = "0";
+            } else {
+                // Favorite
+                fetch(`/tracks/${songId}/favorites`, {
+                    method: 'PUT'
+                });
+                e.target.classList.add('bi-heart-fill');
+                e.target.classList.remove('bi-heart');
+
+                e.target.dataset.favorited = "1";
+            }
+        } else {
+            queue.push({title: e.currentTarget.dataset.title, src: '/tracks/stream/' + songId});
+            playSong(queue.length - 1);
+        }
+    });
 });
 
-function playSong(e) {
-    const songId = e.currentTarget.dataset.id;
-    if (e.target.classList.contains('favoriteBtn')) {
-        if (e.target.dataset.favorited === '1') {
-            // Unfavorite
-            fetch(`/tracks/${songId}/favorites`, {
-                method: 'DELETE'
-            });
-
-            e.target.classList.add('bi-heart');
-            e.target.classList.remove('bi-heart-fill');
-
-            e.target.dataset.favorited = "0";
-        } else {
-            // Favorite
-            fetch(`/tracks/${songId}/favorites`, {
-                method: 'PUT'
-            });
-            e.target.classList.add('bi-heart-fill');
-            e.target.classList.remove('bi-heart');
-
-            e.target.dataset.favorited = "1";
-        }
-    } else {
-        songName.innerHTML = e.currentTarget.dataset.title
-        audio.src = '/tracks/stream/' + songId;
+function playSong(idx) {
+    if (queue[idx]) {
+        songName.innerHTML = queue[idx].title;
+        audio.src = queue[idx].src;
+        currentPlayingIdx = idx;
         audio.play();
     }
 }
