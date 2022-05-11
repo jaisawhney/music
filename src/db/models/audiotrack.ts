@@ -9,7 +9,7 @@ export default (sequelize: Sequelize) => {
         declare albumArt: string | null;
         declare filePath: string;
 
-        public associate(models: any) {
+        static associate(models: any) {
             AudioTrack.belongsToMany(models.User, {through: 'Favorites', as: 'favoritedBy', foreignKey: 'trackId'});
         }
     }
@@ -43,6 +43,5 @@ export default (sequelize: Sequelize) => {
         sequelize,
         modelName: 'AudioTrack',
     });
-
     return AudioTrack
 }

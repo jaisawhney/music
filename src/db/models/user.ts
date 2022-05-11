@@ -8,7 +8,7 @@ export default (sequelize: Sequelize) => {
         declare password: string;
         declare validatePassword: (password: string) => boolean;
 
-        public static associate(models: any) {
+        static associate(models: any) {
             User.belongsToMany(models.AudioTrack, {through: 'Favorites', as: 'favorites', foreignKey: 'userId'});
         }
     }
@@ -40,6 +40,5 @@ export default (sequelize: Sequelize) => {
     User.prototype.validatePassword = function (password) {
         return bcrypt.compareSync(password, this.password);
     }
-
     return User
 }
